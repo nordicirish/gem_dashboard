@@ -15,7 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies and build CSS
 RUN npm install
-RUN chmod +x ./node_modules/.bin/postcss
 RUN npm run build
 
 # Get the port from the environment variable (Cloud Run provides this)
