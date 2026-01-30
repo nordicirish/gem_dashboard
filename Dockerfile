@@ -16,11 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Install Node.js dependencies and build CSS
 RUN npm install
 RUN chmod -R +x ./node_modules/.bin
-RUN echo "--- Before build ---"
-RUN ls -l public
 RUN npm run build
-RUN echo "--- After build ---"
-RUN ls -l public
 
 # Get the port from the environment variable (Cloud Run provides this)
 ENV PORT 8080
@@ -30,4 +26,4 @@ EXPOSE $PORT
 
 # Define the command to run the application
 # Uvicorn will be started by the python script
-CMD gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:$PORT main:app
+CMD ls -l public && gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:$PORT main:app
