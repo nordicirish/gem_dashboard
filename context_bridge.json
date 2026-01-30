@@ -1,0 +1,36 @@
+{
+  "id": "GEM-Context-v1.5-FINAL",
+  "last_updated": "2026-01-29T02:50:00Z",
+  "context_engine": {
+    "risk_regime": "REPLICATOR_ACTIVE",
+    "cash_remaining": "2570€",
+    "portfolio_snapshot": [
+      { "ticker": "RCAT", "shares": 1065, "wac": 14.37, "status": "CORE_HOLD" },
+      { "ticker": "UMAC", "shares": 504, "wac": 16.3, "status": "ACCUMULATED" },
+      {
+        "ticker": "RKLB",
+        "shares": 134,
+        "wac": 85.39,
+        "status": "70_LIMIT_AT_89.95"
+      },
+      {
+        "ticker": "ONDS",
+        "shares": 100,
+        "wac": 11.78,
+        "status": "WATCHING_RVOL"
+      },
+      { "ticker": "VST", "shares": 25, "wac": 161.79, "status": "POWER_HOLD" },
+      { "ticker": "DFTX", "shares": 85, "wac": 17.53, "status": "SPEC_HOLD" },
+      {
+        "ticker": "KTOS",
+        "shares": 22,
+        "wac": 116.89,
+        "status": "CORE_DEFENSE"
+      }
+    ],
+    "metadata": {
+      "session_notes": "PLTR fully exited. UMAC position restored to 504 shares. Ready for Jan 29 volatility.",
+      "manual_ingest": true
+    }
+  }
+}
