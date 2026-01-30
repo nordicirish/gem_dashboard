@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# Docker
+Dockerfile
+
+# Git
+.git
+.gitignore
+
+# Gemini
+.gemini/

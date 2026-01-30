@@ -1,0 +1,30 @@
+{
+  "name": "gem_dashboard",
+  "version": "1.0.0",
+  "description": "This is a backend web application that provides real-time stock data. It's built with Python and FastAPI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "postcss ./public/style.css -o ./public/output.css",
+    "dev": "postcss ./public/style.css -o ./public/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nordicirish/gem_dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nordicirish/gem_dashboard/issues"
+  },
+  "homepage": "https://github.com/nordicirish/gem_dashboard#readme",
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "autoprefixer": "^10.4.24",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.1.18"
+  }
+}

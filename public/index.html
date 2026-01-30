@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEM DAEMON Commander</title>
+    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+    <div class="container mx-auto p-4">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-4">
+            <div class="flex items-center space-x-4">
+                <div class="bg-blue-600 p-2 rounded">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold">GEM DAEMON Commander</h1>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-green-400 text-sm">ONLINE</span>
+                        <span id="timestamp" class="text-sm text-gray-400"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-circle text-green-500"></i>
+                    <span id="mode">Local Mode</span>
+                </div>
+                <div id="market-status-card" class="px-2 py-1 rounded text-white text-sm font-bold">
+                    <span id="market-status">--</span>
+                </div>
+                <button id="config-btn" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-gray-400">BOND YIELDS</h2>
+                        <p id="bond-yields-status" class="text-2xl font-bold">--</p>
+                    </div>
+                    <i class="fas fa-chart-line text-gray-500"></i>
+                </div>
+                <div class="mt-2">
+                    <span id="bond-yields-tag" class="text-sm px-2 py-1 bg-red-600 rounded">--</span>
+                    <span id="bond-yields-value" class="text-sm text-gray-400 ml-2"></span>
+                </div>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-gray-400">US DOLLAR (UUP)</h2>
+                        <p id="us-dollar-value" class="text-2xl font-bold">--</p>
+                    </div>
+                    <i class="fas fa-dollar-sign text-gray-500"></i>
+                </div>
+                <div class="mt-2">
+                    <span id="us-dollar-tag" class="text-sm px-2 py-1 bg-green-600 rounded">--</span>
+                </div>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-gray-400">MARKET FEAR</h2>
+                        <p id="market-fear-status" class="text-2xl font-bold">--</p>
+                    </div>
+                    <i class="fas fa-exclamation-triangle text-gray-500"></i>
+                </div>
+                <div class="mt-2">
+                    <span id="market-fear-tag" class="text-sm px-2 py-1 bg-red-600 rounded">--</span>
+                     <span id="market-fear-value" class="text-sm text-gray-400 ml-2"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading -->
+        <div id="loading" class="text-center py-8">
+            <i class="fas fa-spinner fa-spin text-4xl"></i>
+            <p class="mt-2">Initializing Data Stream...</p>
+        </div>
+
+        <!-- Data Table -->
+        <div id="data-container" class="overflow-x-auto hidden">
+            <table class="min-w-full bg-gray-800 border-collapse">
+                <thead>
+                    <tr class="bg-gray-800">
+                        <th class="py-2 px-4 text-left">TICKER</th>
+                        <th class="py-2 px-4 text-right">PRICE</th>
+                        <th class="py-2 px-4 text-right">GAP %</th>
+                        <th class="py-2 px-4 text-right">VOL</th>
+                        <th class="py-2 px-4 text-right">ATR %</th>
+                        <th class="py-2 px-4 text-right">RSI</th>
+                        <th class="py-2 px-4 text-right">VWAP</th>
+                        <th class="py-2 px-4 text-center">TREND</th>
+                        <th class="py-2 px-4 text-center">SCORE</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="flex justify-between items-center mt-4 text-sm text-gray-400">
+            <div>
+                <span id="update-timer">Update in 30s</span>
+                <span class="ml-4">Press <kbd class="px-2 py-1 bg-gray-700 rounded">C</kbd> to copy JSON</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="copy-json-btn">Copy</button>
+                <button id="reset-btn">Reset</button>
+                <button class="bg-blue-600 px-4 py-2 rounded-full flex items-center space-x-2">
+                    <i class="fas fa-star"></i>
+                    <span>Ask Gemini</span>
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Configuration Modal -->
+    <div id="config-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+        <div class="bg-gray-800 rounded-lg p-8 w-full max-w-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Configuration</h2>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label for="market-input" class="block text-sm font-medium text-gray-400 mb-1">Market (SPY)</label>
+                    <input type="text" id="market-input" class="bg-gray-900 border border-gray-700 rounded px-3 py-2 w-full" value="SPY">
+                </div>
+                <div>
+                    <label for="volatility-input" class="block text-sm font-medium text-gray-400 mb-1">Volatility (VXX)</label>
+                    <input type="text" id="volatility-input" class="bg-gray-900 border border-gray-700 rounded px-3 py-2 w-full" value="VXX">
+                </div>
+                <div>
+                    <label for="bonds-input" class="block text-sm font-medium text-gray-400 mb-1">Bonds (IEF)</label>
+                    <input type="text" id="bonds-input" class="bg-gray-900 border border-gray-700 rounded px-3 py-2 w-full" value="IEF">
+                </div>
+                <div>
+                    <label for="dollar-input" class="block text-sm font-medium text-gray-400 mb-1">Dollar (UUP)</label>
+                    <input type="text" id="dollar-input" class="bg-gray-900 border border-gray-700 rounded px-3 py-2 w-full" value="UUP">
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold mb-2">WATCHLIST TICKERS</h3>
+                <textarea id="watchlist-input" class="bg-gray-900 border border-gray-700 rounded px-3 py-2 w-full h-48" placeholder="Enter one ticker per line."></textarea>
+            </div>
+
+            <div class="flex justify-end mt-6">
+                <button id="cancel-btn" class="bg-transparent text-white font-bold py-2 px-4 rounded mr-2">Cancel</button>
+                <button id="save-changes-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

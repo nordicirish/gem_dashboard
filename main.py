@@ -10,6 +10,7 @@ import sys
 import json
 import re
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -570,10 +571,6 @@ def calculate_score(symbol):
 # API Endpoints
 # -----------------------------
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the Stock Data API"}
-
 @app.get("/data")
 def get_data():
     ny_now = datetime.now(ZoneInfo("America/New_York"))
@@ -631,11 +628,33 @@ def get_data():
             "trend": "UP" if ts >= 2 else "DOWN" if ts <= -2 else "FLAT",
             "note": note.strip()
         })
-        
+
+    # Create summary
+    summary_data = {}
+    for item in data:
+        if item['ticker'] == 'IEF': # Bond Yields
+            summary_data['bond_yields'] = {
+                "status": "FALLING" if item['gap_percent'] < 0 else "RISING",
+                "tag": "YIELDS FALLING" if item['gap_percent'] < 0 else "YIELDS RISING",
+                "value": f"IEF: {item['price']:.2f} ({item['gap_percent']:+.2f}%)"
+            }
+        elif item['ticker'] == 'UUP': # US Dollar
+            summary_data['us_dollar'] = {
+                "value": f"{item['price']:.2f}",
+                "tag": "DOLLAR STRONG" if item['gap_percent'] > 0 else "DOLLAR WEAK"
+            }
+        elif item['ticker'] == 'VXX': # Market Fear
+            summary_data['market_fear'] = {
+                "status": "RISK ON" if item['gap_percent'] < 0 else "RISK OFF",
+                "tag": "FEAR RISING" if item['gap_percent'] > 0 else "FEAR FALLING",
+                "value": f"VXX: {item['price']:.2f} ({item['gap_percent']:+.2f}%)"
+            }
+
     final_output = {
         "timestamp": datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M:%S'),
         "status": status,
-        "tickers": data
+        "tickers": data,
+        "summary": summary_data
     }
     return final_output
 
@@ -650,6 +669,8 @@ def update_symbols(new_tickers: list[str]):
 def reset_cache():
     cache.clear()
     return {"message": "Cache cleared successfully."}
+
+app.mount("/", StaticFiles(directory="public", html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
