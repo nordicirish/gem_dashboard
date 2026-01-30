@@ -21,4 +21,4 @@ EXPOSE $PORT
 
 # Define the command to run the application
 # Uvicorn will be started by the python script
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:$PORT", "main:app"]
+CMD gunicorn -k uvicorn.workers.UvicornWorker -w 1 -b 0.0.0.0:$PORT main:app
