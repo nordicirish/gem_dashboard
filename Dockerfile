@@ -4,14 +4,18 @@ FROM python:3.11-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
-COPY requirements.txt .
+# Install Node.js and npm
+RUN apt-get update && apt-get install -y nodejs npm
 
-# Install any needed packages specified in requirements.txt
+# Copy application files
+COPY . .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application's code to the working directory
-COPY . .
+# Install Node.js dependencies and build CSS
+RUN npm install
+RUN npm run build
 
 # Get the port from the environment variable (Cloud Run provides this)
 ENV PORT 8080
